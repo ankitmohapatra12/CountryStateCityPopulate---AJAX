@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- <script th:src="@{/js/csc.js}"></script> -->
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="container">
+		<div class="card">
+			<div class="card-header bg-primary text-white text-center">
+				
+			</div>
+			<div class="card-body">
+				<form>
+				
+					<div class="row">
+						<div class="col-2">Country</div>
+						<div class="col-8">
+							<select id="countries" class="form-control">
+								<option value='-1'>SELECT</option>
+								<option th:each="ob:${countries}" th:value="${ob.id}"
+									th:text="${ob.name}" /></option>
+							</select>
+						</div>
+					</div>
+					<br/>
+					<div class="row">
+						<div class="col-2">State</div>
+						<div class="col-8">
+							<select id="states" class="form-control">
+								<option value='-1'>SELECT</option>
+							</select>
+						</div>
+					</div>
+					<br/>
+					<div class="row">
+						<div class="col-2">City</div>
+						<div class="col-8">
+							<select id="cities" class="form-control">
+								<option value='-1'>SELECT</option>
+							</select>
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</div>
+		
+	</div>
+
+
+	<script type="text/javascript">
+
+
+			$(document).ready(function(){
+			
+				$('#countries').on('change', function(){
+					var countryId = $(this).val();
+					$.ajax({
+						type: 'GET',
+						url: 'getStates/' + countryId,
+						success: function(result) {
+							var result = JSON.parse(result);
+							var s = '';
+							for(var i = 0; i < result.length; i++) {
+								s += '<option value="' + result[i].id + '">' + result[i].name + '</option>';
+							}
+							$('#states').html(s);
+						}
+					});
+				});
+			
+			
+				$('#states').on('change', function(){
+					var stateId = $(this).val();
+					$.ajax({
+						type: 'GET',
+						url: 'getCities/' + stateId,
+						success: function(result) {
+							var result = JSON.parse(result);
+							var s = '';
+							for(var i = 0; i < result.length; i++) {
+								s += '<option value="' + result[i].id + '">' + result[i].name + '</option>';
+							}
+							$('#cities').html(s);
+						}
+					});
+				});
+			
+			});
+			
+			
+	</script>
+</body>
+</html>
